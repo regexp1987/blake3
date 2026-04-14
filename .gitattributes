@@ -1,0 +1,32 @@
+# Exclude build artefacts from git archive (used by Packagist for dist packages)
+/autom4te.cache/       export-ignore
+/build/                export-ignore
+/modules/              export-ignore
+/Makefile              export-ignore
+/Makefile.fragments    export-ignore
+/Makefile.objects      export-ignore
+/configure             export-ignore
+/config.h              export-ignore
+/config.h.in           export-ignore
+/config.log            export-ignore
+/config.nice           export-ignore
+/config.status         export-ignore
+/config.w32            export-ignore
+/libtool               export-ignore
+/tmp-php.ini           export-ignore
+/run-tests.php         export-ignore
+/build.sh              export-ignore
+/*.o                   export-ignore
+/c/*.o                 export-ignore
+
+# Normalise line endings
+* text=auto
+*.c text eol=lf
+*.h text eol=lf
+*.S text eol=lf
+*.m4 text eol=lf
+*.php text eol=lf
+*.phpt text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.asm text eol=crlf
