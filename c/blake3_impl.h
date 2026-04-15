@@ -13,6 +13,7 @@
 extern "C" {
 #endif
 
+// internal flags
 enum blake3_flags {
   CHUNK_START         = 1 << 0,
   CHUNK_END           = 1 << 1,
@@ -23,7 +24,8 @@ enum blake3_flags {
   DERIVE_KEY_MATERIAL = 1 << 6,
 };
 
-
+// This C implementation tries to support recent versions of GCC, Clang, and
+// MSVC.
 #if defined(_MSC_VER)
 #define INLINE static __forceinline
 #else
@@ -56,7 +58,8 @@ enum blake3_flags {
 #endif
 #endif
 
-#if !defined(BLAKE3_USE_NEON)
+#if !defined(BLAKE3_USE_NEON) 
+  // If BLAKE3_USE_NEON not manually set, autodetect based on AArch64ness
   #if defined(IS_AARCH64)
     #if defined(__ARM_BIG_ENDIAN)
       #define BLAKE3_USE_NEON 0
@@ -76,7 +79,8 @@ enum blake3_flags {
 #define MAX_SIMD_DEGREE 1
 #endif
 
-
+// There are some places where we want a static size that's equal to the
+// MAX_SIMD_DEGREE, but also at least 2.
 #define MAX_SIMD_DEGREE_OR_2 (MAX_SIMD_DEGREE > 2 ? MAX_SIMD_DEGREE : 2)
 
 static const uint32_t IV[8] = {0x6A09E667UL, 0xBB67AE85UL, 0x3C6EF372UL,
@@ -93,7 +97,8 @@ static const uint8_t MSG_SCHEDULE[7][16] = {
     {11, 15, 5, 0, 1, 9, 8, 6, 14, 10, 2, 12, 3, 4, 7, 13},
 };
 
-
+/* Find index of the highest set bit */
+/* x is assumed to be nonzero.       */
 static unsigned int highest_one(uint64_t x) {
 #if defined(__GNUC__) || defined(__clang__)
   return 63 ^ (unsigned int)__builtin_clzll(x);
@@ -123,6 +128,7 @@ static unsigned int highest_one(uint64_t x) {
 #endif
 }
 
+// Count the number of 1 bits.
 INLINE unsigned int popcnt(uint64_t x) {
 #if defined(__GNUC__) || defined(__clang__)
   return (unsigned int)__builtin_popcountll(x);
@@ -136,6 +142,8 @@ INLINE unsigned int popcnt(uint64_t x) {
 #endif
 }
 
+// Largest power of two less than or equal to x. As a special case, returns 1
+// when x is 0. 
 INLINE uint64_t round_down_to_power_of_2(uint64_t x) {
   return 1ULL << highest_one(x | 1);
 }
@@ -219,13 +227,17 @@ BLAKE3_PRIVATE size_t blake3_compress_subtree_wide(const uint8_t *input, size_t 
 
 #if defined(BLAKE3_USE_TBB)
 BLAKE3_PRIVATE void blake3_compress_subtree_wide_join_tbb(
-        const uint32_t key[8], uint8_t flags, bool use_tbb,
-        const uint8_t *l_input, size_t l_input_len, uint64_t l_chunk_counter,
+    // shared params
+    const uint32_t key[8], uint8_t flags, bool use_tbb,
+    // left-hand side params
+    const uint8_t *l_input, size_t l_input_len, uint64_t l_chunk_counter,
     uint8_t *l_cvs, size_t *l_n,
-        const uint8_t *r_input, size_t r_input_len, uint64_t r_chunk_counter,
+    // right-hand side params
+    const uint8_t *r_input, size_t r_input_len, uint64_t r_chunk_counter,
     uint8_t *r_cvs, size_t *r_n) NOEXCEPT;
 #endif
 
+// Declarations for implementation-specific functions.
 void blake3_compress_in_place_portable(uint32_t cv[8],
                                        const uint8_t block[BLAKE3_BLOCK_LEN],
                                        uint8_t block_len, uint64_t counter,

@@ -6,7 +6,6 @@ PHP_ARG_ENABLE([blake3],
 if test "$PHP_BLAKE3" != "no"; then
   AC_DEFINE(HAVE_BLAKE3, 1, [Have BLAKE3 support])
 
-  # Detect secure zero-memory function
   AC_CHECK_FUNCS([explicit_bzero])
   if test "$ac_cv_func_explicit_bzero" != "yes"; then
     AC_CHECK_FUNCS([memset_s])

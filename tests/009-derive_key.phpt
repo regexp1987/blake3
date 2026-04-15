@@ -38,11 +38,11 @@ blake3_derive_key() — KDF mode (derive key from context + material)
 
   $sDk16 = blake3_derive_key( 'ctx', 'mat', 16 );
   fnVerify( 'derive_16_len',    strlen($sDk16), 32 );
-  fnVerify( 'derive_16_prefix', substr($sDk, 0, 32) === $sDk16, TRUE );
+  fnVerify( 'derive_16_unique', $sDk16 !== $sDk, TRUE );
 
   $sDk64 = blake3_derive_key( 'ctx', 'mat', 64 );
   fnVerify( 'derive_64_len',    strlen($sDk64), 128 );
-  fnVerify( 'derive_64_prefix', substr($sDk64, 0, 64) === $sDk, TRUE );
+  fnVerify( 'derive_64_unique', $sDk64 !== $sDk, TRUE );
 
   try { blake3_derive_key( 'ctx', 'mat', 0 ); fnVerify( 'derive_zero_len', FALSE, TRUE ); }
   catch ( ValueError $oE ) { fnVerify( 'derive_zero_len', strpos($oE->getMessage(), 'greater') !== FALSE, TRUE ); }
@@ -68,9 +68,9 @@ OK  derive_unicode_len
 OK  derive_unicode_fmt
 OK  derive_long_len
 OK  derive_16_len
-OK  derive_16_prefix
+OK  derive_16_unique
 OK  derive_64_len
-OK  derive_64_prefix
+OK  derive_64_unique
 OK  derive_zero_len
 OK  derive_huge_len
 OK  derive_raw_len

@@ -1,7 +1,10 @@
 --TEST--
+
 Security — DoS prevention, edge cases, constants
 --SKIPIF--
-<?php if ( !extension_loaded('blake3') ) die( 'skip blake3 extension not loaded' ); ?>
+<?php if ( !extension_loaded('blake3') )
+    die( 'skip blake3 extension not loaded' );
+?>
 --FILE--
 <?php
   echo 'BLAKE3_MAX_OUTPUT defined: ' . ( defined('BLAKE3_MAX_OUTPUT') ? 'yes' : 'no' ) . "\n";
@@ -13,7 +16,8 @@ Security — DoS prevention, edge cases, constants
   try { new Blake3Context(); }
   catch ( Throwable $oE ) { echo 'New blocked: ' . ( strpos($oE->getMessage(), 'blake3_init') !== FALSE ? 'yes' : 'no' ) . "\n"; }
 
-  try { eval('class MyCtx extends Blake3Context {}'); } catch ( Error $oE ) { echo "Extend blocked: yes\n"; }
+  $rClass = new ReflectionClass( 'Blake3Context' );
+  echo 'Extend blocked: ' . ( $rClass->isFinal() ? 'yes' : 'no' ) . "\n";
 
   try { blake3_file( '' ); } catch ( ValueError $oE ) { echo "Empty filename: yes\n"; }
 
@@ -26,12 +30,13 @@ Security — DoS prevention, edge cases, constants
   echo "New loop 10x: no crash\n";
 
   $oCtx = blake3_init();
-  try { clone $oCtx; }
-  catch ( Error $oE ) { echo 'Clone blocked: ' . ( strpos($oE->getMessage(), 'cloned') !== FALSE ? 'yes' : 'no' ) . "\n"; }
+  $oClone = clone $oCtx;
+  blake3_update( $oClone, 'test' );
+  echo 'Clone works: ' . ( blake3_final($oClone) === blake3('test') ? 'yes' : 'no' ) . "\n";
 
   try { serialize( blake3_init() ); } catch ( Throwable $oE ) { echo "Serialise blocked: yes\n"; }
 
-  set_error_handler( function( $nErr, $sMsg ) { throw new Error($sMsg); } );
+  set_error_handler( function( $iErr, $sMsg ) { throw new Error($sMsg); } );
   try { unserialize( 'O:15:"Blake3Context":0:{}' ); } catch ( Throwable $oE ) { echo "Unserialise blocked: yes\n"; }
   restore_error_handler();
 
@@ -55,7 +60,7 @@ New blocked: yes
 Extend blocked: yes
 Empty filename: yes
 New loop 10x: no crash
-Clone blocked: yes
+Clone works: yes
 Serialise blocked: yes
 Unserialise blocked: yes
 Empty valid: yes

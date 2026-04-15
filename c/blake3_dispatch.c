@@ -137,14 +137,17 @@ static
     if (*ecx & (1UL << 19))
       features |= SSE41;
 
-    if (*ecx & (1UL << 27)) {       const uint64_t mask = xgetbv();
-      if ((mask & 6) == 6) {         if (*ecx & (1UL << 28))
+    if (*ecx & (1UL << 27)) { // OSXSAVE
+      const uint64_t mask = xgetbv();
+      if ((mask & 6) == 6) { // SSE and AVX states
+        if (*ecx & (1UL << 28))
           features |= AVX;
         if (max_id >= 7) {
           cpuidex(regs, 7, 0);
           if (*ebx & (1UL << 5))
             features |= AVX2;
-          if ((mask & 224) == 224) {             if (*ebx & (1UL << 31))
+          if ((mask & 224) == 224) { // Opmask, ZMM_Hi256, Hi16_Zmm
+            if (*ebx & (1UL << 31))
               features |= AVX512VL;
             if (*ebx & (1UL << 16))
               features |= AVX512F;
@@ -226,7 +229,8 @@ void blake3_xof_many(const uint32_t cv[8],
                      uint8_t block_len, uint64_t counter, uint8_t flags,
                      uint8_t out[64], size_t outblocks) {
   if (outblocks == 0) {
-        return;
+    // The current assembly implementation always outputs at least 1 block.
+    return;
   }
 #if defined(IS_X86)
   const enum cpu_feature features = get_cpu_features();
@@ -295,6 +299,7 @@ void blake3_hash_many(const uint8_t *const *inputs, size_t num_inputs,
                             out);
 }
 
+// The dynamically detected SIMD degree of the current platform.
 size_t blake3_simd_degree(void) {
 #if defined(IS_X86)
   const enum cpu_feature features = get_cpu_features();

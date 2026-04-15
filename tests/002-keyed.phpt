@@ -14,8 +14,16 @@ blake3() keyed mode (MAC) — strict vector verification
   {
     global $uPass, $uFail;
 
-    if ( $mActual === $mExpected ) { $uPass++; echo "OK  $sLabel\n"; }
-    else { $uFail++; echo "FAIL $sLabel\n  got:    $mActual\n  expect: $mExpected\n"; }
+    if ( $mActual === $mExpected )
+    {
+      $uPass++;
+      echo "OK  $sLabel\n";
+    }
+    else
+    {
+      $uFail++;
+      echo "FAIL $sLabel\n  got:    $mActual\n  expect: $mExpected\n";
+    }
   }
 
   fnVerify( 'keyed_empty',   blake3('', 32, $sKey),      '81591338b3d8b9dc4ff3b228cdd28b23df07fcecb1e2e77c4725beeccd77e916' );

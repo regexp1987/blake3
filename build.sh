@@ -1,6 +1,4 @@
 #!/bin/bash
-# build.sh — Build script for PHP BLAKE3 extension
-# Usage: ./build.sh [clean]
 set -e
 
 EXT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -20,24 +18,19 @@ esac
 echo "=== PHP BLAKE3 Extension v2.0.0 — Build ==="
 echo ""
 
-# Step 1: phpize
 echo ">> phpize"
 phpize 2>&1 | tail -2
 
-# Step 2: configure (detects explicit_bzero, memset_s)
 echo ">> configure"
 ./configure --enable-blake3 >/dev/null 2>&1
 
-# Step 3: Fix PHP 8.4+ Makefile bug
 if ! grep -q "include.*Makefile.objects" Makefile 2>/dev/null; then
   echo 'include $(top_srcdir)/Makefile.objects' >> Makefile
 fi
 
-# Step 4: Compile
 echo ">> compile"
 make -j$(nproc) 2>&1 | grep -E "error:|warning:" | grep -v "overriding\|ignoring" || true
 
-# Step 5: Manual build if make didn't produce .so
 if [ ! -f "modules/blake3.so" ]; then
   echo ">> manual build"
   cc -I. -I$(pwd) -I$(pwd)/c $(php-config --includes) \
@@ -52,14 +45,13 @@ if [ ! -f "modules/blake3.so" ]; then
   cc -shared -o modules/blake3.so blake3.o c/*.o
 fi
 
-# Step 6: Verify
 SO="modules/blake3.so"
 if [ -f "$SO" ]; then
   SIZE=$(stat -c%s "$SO" 2>/dev/null || stat -f%z "$SO" 2>/dev/null)
   echo ""
   echo "✅ blake3.so — ${SIZE} bytes"
   echo ""
-  echo ">> Quick test:"
+  echo ">> Test:"
   php -d extension="$EXT_DIR/$SO" -r "
     echo '  blake3(\"hello\") = ' . blake3('hello') . PHP_EOL;
     echo '  version = ' . blake3_version() . PHP_EOL;

@@ -19,7 +19,7 @@ blake3_file() — streaming file hash
   echo 'Short length: ' . strlen( $sShort ) . "\n";
 
   $bMissing = @blake3_file( '/nonexistent/file/path' );
-  echo 'Missing file returns false: ' . ( $bMissing === FALSE ? 'yes' : 'no' ) . "\n";
+  echo 'Missing file returns FALSE: ' . ( $bMissing === FALSE ? 'yes' : 'no' ) . "\n";
 
   $sKey = str_repeat( 'k', 32 );
   $sMac = blake3_file( $sTmp, 32, $sKey );
@@ -37,7 +37,7 @@ Length: 64
 Matches one-shot: yes
 Raw matches: yes
 Short length: 32
-Missing file returns false: yes
+Missing file returns FALSE: yes
 File keyed len: 64
 File keyed match: yes
 File keyed raw: yes

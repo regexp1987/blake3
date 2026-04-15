@@ -389,40 +389,6 @@ assert(blake3("") === 'af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae
 assert(blake3("hello") === 'ea8f163db38682925e4491c5e58d4bb3506ef8c14eb78a86e908c5624a67200f');
 ```
 
-## Architecture
-
-```
-ext/blake3/
-├── blake3.c                 # PHP extension (Zend API binding)
-├── php_blake3.h             # Extension header
-├── config.m4                # Autoconf build script (Unix)
-├── config.w32               # Windows build script
-├── LICENSE                  # MIT License
-├── README.md                # This file
-├── tests/                   # PHPT test suite
-│   ├── 001-basic.phpt
-│   ├── 002-keyed.phpt
-│   ├── 003-incremental.phpt
-│   ├── 004-file.phpt
-│   ├── 005-xof.phpt
-│   ├── 006-errors.phpt
-│   ├── 007-reset.phpt
-│   ├── 008-security.phpt
-│   └── 009-derive_key.phpt
-└── c/                       # BLAKE3 C reference implementation v1.8.4
-    ├── blake3.h
-    ├── blake3.c
-    ├── blake3_dispatch.c
-    ├── blake3_portable.c
-    ├── blake3_neon.c
-    ├── blake3_impl.h
-    ├── blake3_avx2_x86-64_unix.S
-    ├── blake3_avx512_x86-64_unix.S
-    ├── blake3_sse2_x86-64_unix.S
-    ├── blake3_sse41_x86-64_unix.S
-    └── blake3_*_windows_msvc.asm  # Windows SIMD (auto-detected)
-```
-
 ## Known Limitations
 
 - **Maximum output length**: limited by available memory (Zend string allocation).

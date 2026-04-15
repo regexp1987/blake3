@@ -11,8 +11,16 @@ blake3() one-shot hash — strict upstream-verified vectors
   {
     global $uPass, $uFail;
 
-    if ( $mActual === $mExpected ) { $uPass++; echo "OK  $sLabel\n"; }
-    else { $uFail++; echo "FAIL $sLabel\n  got:    $mActual\n  expect: $mExpected\n"; }
+    if ( $mActual === $mExpected )
+    {
+      $uPass++;
+      echo "OK  $sLabel\n";
+    }
+    else
+    {
+      $uFail++;
+      echo "FAIL $sLabel\n  got:    $mActual\n  expect: $mExpected\n";
+    }
   }
 
   fnVerify( 'empty',    blake3(''),           'af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262' );
