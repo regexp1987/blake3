@@ -43,7 +43,7 @@ curl -sS https://github.com/php/pie/releases/latest/download/pie.phar -o pie.pha
 chmod +x pie.phar
 
 # Install BLAKE3 extension
-php pie.phar install regexp1987/blake3-php
+php pie.phar install regexp1987/blake3
 
 # Verify
 php -r "echo blake3('hello') . PHP_EOL;"
@@ -360,13 +360,13 @@ Compare BLAKE3 with PHP built-in hash functions:
 $data = str_repeat("x", 1024 * 1024); // 1 MB
 
 $start = microtime(true);
-for ($i = 0; $i < 100; $i++) {
+for ($i = 0; $i < 100; ++$i) {
     blake3($data);
 }
 printf("BLAKE3:  %.2f ms/op\n", (microtime(true) - $start) / 100 * 1000);
 
 $start = microtime(true);
-for ($i = 0; $i < 100; $i++) {
+for ($i = 0; $i < 100; ++$i) {
     hash('sha256', $data);
 }
 printf("SHA-256: %.2f ms/op\n", (microtime(true) - $start) / 100 * 1000);
@@ -446,3 +446,15 @@ The bundled BLAKE3 C reference implementation is dual-licensed under
   [Samuel Neves](https://web.mat.upc.edu/samuel.neves/)
 - **C reference implementation** by the [BLAKE3 team](https://github.com/BLAKE3-team/BLAKE3)
 - **PHP extension** by [Andrea Pievaioli](https://github.com/regexp1987)
+
+## Publishing to Packagist
+
+This extension is PIE-compatible and can be installed via `php pie.phar install regexp1987/blake3`.
+
+To publish on Packagist:
+
+1. Ensure `composer.json` is in the repository root
+2. Tag a release: `git tag v1.0.0 && git push --tags`
+3. Submit to [Packagist](https://packagist.org/packages/submit) with the repository URL
+4. Packagist will detect the `type: php-ext` and list it under [PHP Extensions](https://packagist.org/extensions)
+
