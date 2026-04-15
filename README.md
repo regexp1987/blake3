@@ -90,7 +90,7 @@ php -r "echo blake3('hello') . PHP_EOL;"
 ### Windows (Visual Studio)
 
 ```bat
-cd ext\blake3
+cd path\to\blake3
 phpize
 configure --enable-blake3
 nmake
