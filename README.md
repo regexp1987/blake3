@@ -61,7 +61,7 @@ PIE automatically:
 If you prefer manual installation or don't have PIE:
 
 ```bash
-cd ext/blake3
+cd path/to/blake3
 
 # Generate build system
 phpize
@@ -104,7 +104,7 @@ Copy `Release\php_blake3.dll` to your PHP `ext` directory and add
 
 ```dockerfile
 FROM php:8.4-cli
-COPY ext/blake3 /usr/local/src/blake3
+COPY path/to/blake3 /usr/local/src/blake3
 RUN cd /usr/local/src/blake3 \
   && phpize \
   && ./configure \
