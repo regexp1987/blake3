@@ -412,5 +412,3 @@ The bundled BLAKE3 C reference implementation is dual-licensed under
   [Samuel Neves](https://web.mat.upc.edu/samuel.neves/)
 - **C reference implementation** by the [BLAKE3 team](https://github.com/BLAKE3-team/BLAKE3)
 - **PHP extension** by [Andrea Pievaioli](https://github.com/regexp1987)
-
-
