@@ -1,7 +1,8 @@
 PHP_ARG_ENABLE([blake3],
   [whether to enable blake3 support],
   [AS_HELP_STRING([--enable-blake3],
-    [Enable blake3 support])])
+    [Enable blake3 support])],
+  [yes])
 
 if test "$PHP_BLAKE3" != "no"; then
   AC_DEFINE(HAVE_BLAKE3, 1, [Have BLAKE3 support])

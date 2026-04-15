@@ -413,14 +413,4 @@ The bundled BLAKE3 C reference implementation is dual-licensed under
 - **C reference implementation** by the [BLAKE3 team](https://github.com/BLAKE3-team/BLAKE3)
 - **PHP extension** by [Andrea Pievaioli](https://github.com/regexp1987)
 
-## Publishing to Packagist
-
-This extension is PIE-compatible and can be installed via `php pie.phar install regexp1987/blake3`.
-
-To publish on Packagist:
-
-1. Ensure `composer.json` is in the repository root
-2. Tag a release: `git tag v1.0.0 && git push --tags`
-3. Submit to [Packagist](https://packagist.org/packages/submit) with the repository URL
-4. Packagist will detect the `type: php-ext` and list it under [PHP Extensions](https://packagist.org/extensions)
 
