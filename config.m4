@@ -21,6 +21,9 @@ if test "$PHP_BLAKE3" != "no"; then
     c/blake3_sse41_x86-64_unix.S \
     c/blake3_avx2_x86-64_unix.S \
     c/blake3_avx512_x86-64_unix.S, \
-    $ext_shared, \
+    $ext_shared, , \
     -I@ext_srcdir@/c -I@ext_builddir@/c)
+  
+  PHP_ADD_BUILD_DIR($ext_builddir/c, 1)
+  PHP_SUBST(BLAKE3_SHARED_LIBADD)
 fi
