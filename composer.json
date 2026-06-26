@@ -1,18 +1,12 @@
 {
   "name": "regexp1987/blake3",
-  "description": "Native PHP extension for the BLAKE3 cryptographic hash function — 4x faster than SHA-256 with SIMD support (AVX-512, AVX2, SSE4.1, SSE2, NEON)",
+  "description": "Native PHP extension for the BLAKE3 cryptographic hash function",
   "type": "php-ext",
   "license": "MIT",
   "require": {
     "php": ">=8.0"
   },
   "php-ext": {
-    "extension-name": "ext-blake3",
-    "configure-options": [
-      {
-        "name": "enable-blake3",
-        "description": "Enable blake3 support"
-      }
-    ]
+    "extension-name": "ext-blake3"
   }
 }
