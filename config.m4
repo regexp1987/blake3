@@ -5,9 +5,6 @@ PHP_ARG_ENABLE([blake3],
   [yes])
 
 if test "$PHP_BLAKE3" != "no"; then
-  dnl Force shared build for PIE compatibility
-  ext_shared=yes
-  
   AC_DEFINE(HAVE_BLAKE3, 1, [Have BLAKE3 support])
 
   AC_CHECK_FUNCS([explicit_bzero])
@@ -24,7 +21,7 @@ if test "$PHP_BLAKE3" != "no"; then
     c/blake3_sse41_x86-64_unix.S \
     c/blake3_avx2_x86-64_unix.S \
     c/blake3_avx512_x86-64_unix.S, \
-    $ext_shared, , \
+    yes, , \
     -I@ext_srcdir@/c -I@ext_builddir@/c)
   
   PHP_ADD_BUILD_DIR($ext_builddir/c, 1)
