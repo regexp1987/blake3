@@ -2,9 +2,12 @@ PHP_ARG_ENABLE([blake3],
   [whether to enable blake3 support],
   [AS_HELP_STRING([--enable-blake3],
     [Enable blake3 support])],
-  [yes], [yes])
+  [yes])
 
 if test "$PHP_BLAKE3" != "no"; then
+  dnl Force shared build for PIE compatibility
+  ext_shared=yes
+  
   AC_DEFINE(HAVE_BLAKE3, 1, [Have BLAKE3 support])
 
   AC_CHECK_FUNCS([explicit_bzero])
